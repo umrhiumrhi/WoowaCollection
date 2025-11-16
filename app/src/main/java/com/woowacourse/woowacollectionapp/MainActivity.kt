@@ -115,7 +115,7 @@ fun MainMenuScreen(
                         letterSpacing = (-0.3).sp
                     )
                     Text(
-                        text = "몰아보기",
+                        text = "프리코스 몰아보기",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         letterSpacing = 0.3.sp
