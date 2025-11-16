@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.woowacourse.woowacollectionapp.R
 import com.woowacourse.woowacollectionapp.calculator.ui.CalculatorScreen
+import com.woowacourse.woowacollectionapp.lotto.ui.LottoScreen
 import com.woowacourse.woowacollectionapp.navigation.NavigationRoutes
 import com.woowacourse.woowacollectionapp.racingcar.ui.RacingCarScreen
 import com.woowacourse.woowacollectionapp.ui.theme.WoowaCollectionAppTheme
@@ -71,7 +72,11 @@ fun MainScreen() {
             )
         }
         composable(NavigationRoutes.LOTTO) {
-            // 로또 화면 (추후 구현)
+            LottoScreen(
+                onNavigateBack = {
+                    navController.popBackStack(NavigationRoutes.MAIN, inclusive = false)
+                }
+            )
         }
     }
 }
