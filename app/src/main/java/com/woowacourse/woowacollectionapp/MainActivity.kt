@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.woowacourse.woowacollectionapp.R
 import com.woowacourse.woowacollectionapp.calculator.ui.CalculatorScreen
 import com.woowacourse.woowacollectionapp.navigation.NavigationRoutes
+import com.woowacourse.woowacollectionapp.racingcar.ui.RacingCarScreen
 import com.woowacourse.woowacollectionapp.ui.theme.WoowaCollectionAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -63,7 +64,11 @@ fun MainScreen() {
             )
         }
         composable(NavigationRoutes.RACING_CAR) {
-            // 레이싱카 화면 (추후 구현)
+            RacingCarScreen(
+                onNavigateBack = {
+                    navController.popBackStack(NavigationRoutes.MAIN, inclusive = false)
+                }
+            )
         }
         composable(NavigationRoutes.LOTTO) {
             // 로또 화면 (추후 구현)
