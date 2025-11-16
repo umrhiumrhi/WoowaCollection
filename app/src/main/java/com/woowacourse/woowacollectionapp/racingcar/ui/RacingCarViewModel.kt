@@ -1,6 +1,9 @@
 package com.woowacourse.woowacollectionapp.racingcar.ui
 
 import androidx.lifecycle.ViewModel
+import com.woowacourse.woowacollectionapp.racingcar.domain.Car
+import com.woowacourse.woowacollectionapp.racingcar.domain.Game
+import com.woowacourse.woowacollectionapp.racingcar.domain.GameValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,24 +25,67 @@ class RacingCarViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(RacingCarUiState())
     val uiState: StateFlow<RacingCarUiState> = _uiState.asStateFlow()
 
+    private var game: Game? = null
+    private var totalRounds: Int = 0
+
     fun setCarNames(names: String) {
-        // TODO: 입력값 처리 구현
+        _uiState.value = _uiState.value.copy(carNames = names, errorMessage = null)
     }
 
     fun setTryCount(count: String) {
-        // TODO: 입력값 처리 구현
+        _uiState.value = _uiState.value.copy(tryCount = count, errorMessage = null)
     }
 
     fun startGame() {
-        // TODO: 게임 시작 로직 구현
+        val names = _uiState.value.carNames
+        val tryCount = _uiState.value.tryCount
+
+        try {
+            val nameList = parseCarNames(names)
+            val count = tryCount.toIntOrNull()
+            
+            GameValidator.validateCarNames(nameList, names)
+            GameValidator.validateTryCount(count)
+
+            initializeGame(nameList, count!!)
+        } catch (e: IllegalArgumentException) {
+            _uiState.value = _uiState.value.copy(errorMessage = e.message)
+        }
+    }
+
+    private fun parseCarNames(names: String): List<String> {
+        return names.split(",")
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+    }
+
+    private fun initializeGame(nameList: List<String>, count: Int) {
+        val cars = nameList.map { Car(it) }
+        game = Game(cars)
+        totalRounds = count
+
+        _uiState.value = _uiState.value.copy(
+            isGameStarted = true,
+            currentRound = 0,
+            currentRoundProgress = emptyList(),
+            gameHistory = emptyList(),
+            winners = emptyList(),
+            isGameFinished = false,
+            showHistory = false,
+            errorMessage = null
+        )
     }
 
     fun resetGame() {
-        // TODO: 게임 초기화 로직 구현
+        _uiState.value = RacingCarUiState()
+        game = null
+        totalRounds = 0
     }
 
     fun toggleHistory() {
-        // TODO: 기록 토글 로직 구현
+        _uiState.value = _uiState.value.copy(
+            showHistory = !_uiState.value.showHistory
+        )
     }
 }
 
