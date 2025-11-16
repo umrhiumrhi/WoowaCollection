@@ -103,16 +103,66 @@ class LottoViewModel : ViewModel() {
         }
     }
 
+    fun confirmLottos() {
+        _uiState.value = _uiState.value.copy(
+            isLottosConfirmed = true
+        )
+    }
+
     fun setBonusNumber(number: String) {
-        // TODO: 입력값 처리 구현
+        _uiState.value = _uiState.value.copy(
+            bonusNumber = number,
+            errorMessage = null
+        )
     }
 
     fun calculateResult() {
-        // TODO: 결과 계산 로직 구현
+        val winNumbersStr = _uiState.value.winNumbers.trim()
+        val bonusStr = _uiState.value.bonusNumber.trim()
+
+        validateInputs(winNumbersStr, bonusStr) ?: return
+
+        try {
+            val winNumbers = InputValidator.winNumbersInput(winNumbersStr)
+            val bonus = InputValidator.bonusNumberInput(bonusStr, winNumbers)
+            val game = createLottoGame(winNumbers, bonus)
+
+            _uiState.value = _uiState.value.copy(
+                game = game,
+                currentStep = LottoStep.RESULT,
+                errorMessage = null
+            )
+        } catch (e: Exception) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = e.message ?: "결과 계산 중 오류가 발생했습니다."
+            )
+        }
+    }
+
+    private fun validateInputs(winNumbersStr: String, bonusStr: String): Boolean? {
+        if (winNumbersStr.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "당첨 번호를 입력해주세요."
+            )
+            return null
+        }
+
+        if (bonusStr.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "보너스 번호를 입력해주세요."
+            )
+            return null
+        }
+        return true
+    }
+
+    private fun createLottoGame(winNumbers: List<Int>, bonus: Int): com.woowacourse.woowacollectionapp.lotto.domain.LottoGame {
+        val winLotto = Lotto(winNumbers)
+        return com.woowacourse.woowacollectionapp.lotto.domain.LottoGame(_uiState.value.lottos, winLotto, bonus)
     }
 
     fun reset() {
-        // TODO: 초기화 로직 구현
+        _uiState.value = LottoUiState()
     }
 }
 
