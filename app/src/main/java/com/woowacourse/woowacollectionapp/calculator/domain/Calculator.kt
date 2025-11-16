@@ -5,8 +5,14 @@ class Calculator {
     private val splitPattern = Regex("[^0-9]+")
 
     fun calculate(input: String): Int {
-        // TODO: 계산 로직 구현
-        return 0
+        if (input.isBlank() || input.isEmpty()) return 0
+
+        val processedInput = extractCustomDelimiter(input)
+        val numbers = extractNumbers(processedInput)
+        val usedDelimiters = extractDelimiters(processedInput)
+
+        validate(numbers, usedDelimiters)
+        return numbers.sum()
     }
 
     private fun extractCustomDelimiter(input: String): String {
