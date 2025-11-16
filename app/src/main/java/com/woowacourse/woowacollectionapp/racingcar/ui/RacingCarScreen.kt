@@ -152,7 +152,84 @@ fun GameProgressSection(
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // TODO: 게임 진행 화면 구현
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            FilterChip(
+                selected = !uiState.showHistory,
+                onClick = { if (uiState.showHistory) onToggleHistory() },
+                label = { Text("실행 결과") },
+                modifier = Modifier.weight(1f),
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    selectedLabelColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    labelColor = MaterialTheme.colorScheme.onSurface
+                ),
+                border = if (!uiState.showHistory) null else BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.onSurface
+                )
+            )
+            FilterChip(
+                selected = uiState.showHistory,
+                onClick = { if (!uiState.showHistory) onToggleHistory() },
+                label = { Text("경기 기록") },
+                modifier = Modifier.weight(1f),
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    selectedLabelColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    labelColor = MaterialTheme.colorScheme.onSurface
+                ),
+                border = if (uiState.showHistory) null else BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.onSurface
+                )
+            )
+        }
+
+        if (!uiState.showHistory) {
+            if (currentRound > 0 && currentRound <= totalRounds) {
+                Text(
+                    text = if (uiState.isGameFinished) {
+                        "경기 종료!"
+                    } else {
+                        "진행 중... (${currentRound}/${totalRounds})"
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            if (uiState.currentRoundProgress.isNotEmpty()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+                    ),
+                    border = BorderStroke(
+                        0.5.dp,
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f)
+                    ),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = "${currentRound}회차",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        uiState.currentRoundProgress.forEach { progress ->
+                            Text(progress)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
