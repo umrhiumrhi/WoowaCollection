@@ -6,14 +6,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.activity.compose.LocalActivity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.woowacourse.woowacollectionapp.MainActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,7 +21,7 @@ fun CalculatorScreen(
     onNavigateBack: () -> Unit,
     viewModel: CalculatorViewModel = viewModel(
         key = "calculator",
-        viewModelStoreOwner = LocalContext.current as MainActivity
+        viewModelStoreOwner = LocalActivity.current as ViewModelStoreOwner
     )
 ) {
     val uiState by viewModel.uiState.collectAsState()
