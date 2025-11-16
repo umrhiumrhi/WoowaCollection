@@ -25,15 +25,38 @@ class CalculatorViewModel : ViewModel() {
     private val calculator = Calculator()
 
     fun setInput(input: String) {
-        // TODO: 입력값 처리 구현
+        _uiState.value = _uiState.value.copy(
+            input = input,
+            errorMessage = null,
+            result = ""
+        )
     }
 
     fun calculate() {
-        // TODO: 계산 로직 구현
+        val input = _uiState.value.input.trim()
+        if (input.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "입력을 입력해주세요."
+            )
+            return
+        }
+
+        try {
+            val result = calculator.calculate(input)
+            _uiState.value = _uiState.value.copy(
+                result = "결과: $result",
+                errorMessage = null
+            )
+        } catch (e: Exception) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = e.message ?: "계산 중 오류가 발생했습니다.",
+                result = ""
+            )
+        }
     }
 
     fun clear() {
-        // TODO: 초기화 로직 구현
+        _uiState.value = CalculatorUiState()
     }
 }
 
