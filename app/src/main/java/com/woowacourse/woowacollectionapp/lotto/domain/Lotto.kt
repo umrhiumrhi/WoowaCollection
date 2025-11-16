@@ -9,7 +9,21 @@ class Lotto(private val numbers: List<Int>) {
     }
 
     init {
-        // TODO: 검증 로직 구현
+        checkCount()
+        checkDuplicate()
+        checkRange()
+    }
+
+    private fun checkCount() {
+        require(numbers.size == NUMBER_COUNT) { ExceptionMessage.NOT_VALID_LOTTO_NUMBERS }
+    }
+
+    private fun checkDuplicate() {
+        require(numbers.distinct().size == NUMBER_COUNT) { ExceptionMessage.DUPLICATE_WIN_NUMBER }
+    }
+
+    private fun checkRange() {
+        require(numbers.all { it in MIN_NUMBER..MAX_NUMBER }) { ExceptionMessage.NOT_IN_RANGE }
     }
 
     override fun toString(): String = numbers.sorted().toString()
