@@ -229,6 +229,83 @@ fun GameProgressSection(
                     }
                 }
             }
+
+            if (uiState.isGameFinished) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+                    ),
+                    border = BorderStroke(
+                        0.5.dp,
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f)
+                    ),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = "최종 우승자: ${uiState.winners.joinToString(", ")}",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = (-0.2).sp
+                        )
+                    }
+                }
+
+                OutlinedButton(
+                    onClick = onReset,
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    border = BorderStroke(
+                        1.5.dp,
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
+                    ),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Text(
+                        "다시 시작",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.3.sp
+                    )
+                }
+            }
+        } else {
+            if (uiState.gameHistory.isEmpty()) {
+                Text(
+                    text = "경기 기록이 없습니다.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                uiState.gameHistory.forEachIndexed { index, round ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                        border = BorderStroke(
+                            0.5.dp,
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.15f)
+                        ),
+                        shape = MaterialTheme.shapes.small
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "${index + 1}회차",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            round.forEach { progress ->
+                                Text(progress)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
