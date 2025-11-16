@@ -8,16 +8,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.woowacourse.woowacollectionapp.MainActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorScreen(
     onNavigateBack: () -> Unit,
-    viewModel: CalculatorViewModel = viewModel()
+    viewModel: CalculatorViewModel = viewModel(
+        key = "calculator",
+        viewModelStoreOwner = LocalContext.current as MainActivity
+    )
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -67,7 +72,7 @@ fun CalculatorScreen(
                 shape = MaterialTheme.shapes.large
             ) {
                 Column(
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     Text(
@@ -118,8 +123,8 @@ fun CalculatorScreen(
                 ) {
                     Text(
                         text = uiState.result,
-                        modifier = Modifier.padding(24.dp),
-                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = (-0.3).sp
                     )
@@ -166,7 +171,6 @@ fun CalculatorScreen(
             }
 
             if (uiState.history.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 12.dp),
                     thickness = 0.5.dp,
@@ -184,7 +188,7 @@ fun CalculatorScreen(
                 
                 Column(
                     modifier = Modifier.padding(top = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     uiState.history.reversed().forEach { history ->
                         Card(
@@ -201,12 +205,12 @@ fun CalculatorScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(20.dp),
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                                    .padding(12.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Text(
                                     text = history.input,
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     letterSpacing = 0.1.sp
                                 )
@@ -214,7 +218,7 @@ fun CalculatorScreen(
                                 HorizontalDivider(
                                     thickness = 0.5.dp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f),
-                                    modifier = Modifier.padding(vertical = 8.dp)
+                                    modifier = Modifier.padding(vertical = 4.dp)
                                 )
                                 
                                 Row(
@@ -224,14 +228,14 @@ fun CalculatorScreen(
                                 ) {
                                     Text(
                                         text = "=",
-                                        style = MaterialTheme.typography.titleLarge,
+                                        style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier.padding(end = 12.dp),
+                                        modifier = Modifier.padding(end = 8.dp),
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = "${history.result}",
-                                        style = MaterialTheme.typography.headlineSmall,
+                                        style = MaterialTheme.typography.titleLarge,
                                         color = MaterialTheme.colorScheme.onSurface,
                                         modifier = Modifier.weight(1f),
                                         fontWeight = FontWeight.Bold,
