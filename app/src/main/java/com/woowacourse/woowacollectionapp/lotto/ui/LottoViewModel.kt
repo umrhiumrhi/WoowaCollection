@@ -73,11 +73,34 @@ class LottoViewModel : ViewModel() {
     }
 
     fun setWinNumbers(numbers: String) {
-        // TODO: 입력값 처리 구현
+        _uiState.value = _uiState.value.copy(
+            winNumbers = numbers,
+            errorMessage = null,
+            isWinNumbersValidated = false
+        )
     }
 
     fun validateWinNumbers() {
-        // TODO: 당첨 번호 검증 로직 구현
+        val numbers = _uiState.value.winNumbers.trim()
+        if (numbers.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "당첨 번호를 입력해주세요."
+            )
+            return
+        }
+
+        try {
+            InputValidator.winNumbersInput(numbers)
+            _uiState.value = _uiState.value.copy(
+                isWinNumbersValidated = true,
+                errorMessage = null
+            )
+        } catch (e: Exception) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = e.message ?: "당첨 번호 입력 중 오류가 발생했습니다.",
+                isWinNumbersValidated = false
+            )
+        }
     }
 
     fun setBonusNumber(number: String) {
