@@ -86,6 +86,62 @@ fun CalculatorScreen(
                     )
                 }
             }
+
+            OutlinedTextField(
+                value = uiState.input,
+                onValueChange = viewModel::setInput,
+                label = { Text("계산할 문자열 입력") },
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("예: 1,2:3") },
+                singleLine = true
+            )
+
+            if (uiState.errorMessage != null) {
+                Text(
+                    text = uiState.errorMessage!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = viewModel::calculate,
+                    modifier = Modifier.weight(1f).height(56.dp),
+                    border = BorderStroke(
+                        1.5.dp,
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
+                    ),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Text(
+                        "계산",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.3.sp
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = viewModel::clear,
+                    modifier = Modifier.weight(1f).height(56.dp),
+                    border = BorderStroke(
+                        1.5.dp,
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    ),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Text(
+                        "초기화",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        letterSpacing = 0.3.sp
+                    )
+                }
+            }
         }
     }
 }
