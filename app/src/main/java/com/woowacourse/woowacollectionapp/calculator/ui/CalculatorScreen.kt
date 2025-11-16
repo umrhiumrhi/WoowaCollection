@@ -104,6 +104,28 @@ fun CalculatorScreen(
                 )
             }
 
+            if (uiState.result.isNotEmpty()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+                    ),
+                    border = BorderStroke(
+                        0.5.dp,
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f)
+                    ),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Text(
+                        text = uiState.result,
+                        modifier = Modifier.padding(24.dp),
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.3).sp
+                    )
+                }
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
