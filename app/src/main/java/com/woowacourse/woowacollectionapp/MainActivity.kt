@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.woowacourse.woowacollectionapp.calculator.ui.CalculatorScreen
 import com.woowacourse.woowacollectionapp.navigation.NavigationRoutes
 import com.woowacourse.woowacollectionapp.ui.theme.WoowaCollectionAppTheme
 
@@ -44,7 +45,11 @@ fun MainScreen() {
             // 메인 메뉴 화면 (추후 구현)
         }
         composable(NavigationRoutes.CALCULATOR) {
-            // 계산기 화면 (추후 구현)
+            CalculatorScreen(
+                onNavigateBack = {
+                    navController.popBackStack(NavigationRoutes.MAIN, inclusive = false)
+                }
+            )
         }
         composable(NavigationRoutes.RACING_CAR) {
             // 레이싱카 화면 (추후 구현)
