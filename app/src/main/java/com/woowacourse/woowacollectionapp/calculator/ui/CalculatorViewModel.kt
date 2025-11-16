@@ -2,6 +2,7 @@ package com.woowacourse.woowacollectionapp.calculator.ui
 
 import androidx.lifecycle.ViewModel
 import com.woowacourse.woowacollectionapp.calculator.domain.Calculator
+import com.woowacourse.woowacollectionapp.calculator.domain.CalculatorConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,9 +44,11 @@ class CalculatorViewModel : ViewModel() {
 
         try {
             val result = calculator.calculate(input)
+            val newHistory = updateHistory(input, result)
             _uiState.value = _uiState.value.copy(
                 result = "결과: $result",
-                errorMessage = null
+                errorMessage = null,
+                history = newHistory
             )
         } catch (e: Exception) {
             _uiState.value = _uiState.value.copy(
@@ -53,6 +56,11 @@ class CalculatorViewModel : ViewModel() {
                 result = ""
             )
         }
+    }
+
+    private fun updateHistory(input: String, result: Int): List<CalculatorHistory> {
+        return (_uiState.value.history + CalculatorHistory(input, result))
+            .takeLast(CalculatorConstants.MAX_HISTORY_COUNT)
     }
 
     fun clear() {
