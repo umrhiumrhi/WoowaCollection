@@ -2,19 +2,13 @@ package com.woowacourse.woowacollectionapp.calculator.domain
 
 class Calculator {
     private val delimiterCandidateList: MutableList<String> = mutableListOf(",", ":")
+    private val splitPattern = Regex("[^0-9]+")
 
     fun calculate(input: String): Int {
         // TODO: 계산 로직 구현
         return 0
     }
 
-    /**
-     * 커스텀 구분자를 추출하고 처리된 입력 문자열을 반환합니다.
-     * 커스텀 구분자 형식: //구분자\n숫자들
-     * 
-     * @param input 원본 입력 문자열
-     * @return 커스텀 구분자가 있으면 구분자 부분을 제거한 문자열, 없으면 원본 문자열
-     */
     private fun extractCustomDelimiter(input: String): String {
         if (!input.startsWith("//")) return input
 
@@ -32,9 +26,30 @@ class Calculator {
         return input.substring(endIndex + 2)
     }
 
-    /**
-     * 현재 사용 가능한 구분자 목록을 반환합니다.
-     */
+    private fun extractNumbers(input: String): List<Int> {
+        val numberList = input.split(splitPattern)
+            .filter { it.isNotEmpty() }
+            .map { it.toInt() }
+        return numberList
+    }
+
+    private fun extractDelimiters(input: String): List<String> {
+        val delimiterList = splitPattern.findAll(input)
+            .map { it.value }
+            .toList()
+        return delimiterList
+    }
+
+    private fun validate(numberList: List<Int>, delimiterList: List<String>) {
+        if (numberList.isEmpty() && delimiterList.isEmpty()) return
+        if (delimiterList.size + 1 != numberList.size) {
+            throw IllegalArgumentException("구분자의 입력이 잘못되었습니다.")
+        }
+        if (delimiterList.any { it !in delimiterCandidateList }) {
+            throw IllegalArgumentException("구분자로 사용될 수 없는 구분자가 사용되었습니다.")
+        }
+    }
+
     fun getDelimiters(): List<String> = delimiterCandidateList.toList()
 }
 
